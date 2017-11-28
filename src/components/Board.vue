@@ -1,8 +1,6 @@
 <template>
   <div class="hello">
     <canvas ref="canvas" width="500px" height="500px">
-      
-
     </canvas>
   </div>
 </template>
