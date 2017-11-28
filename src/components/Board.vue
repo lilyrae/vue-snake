@@ -22,7 +22,8 @@ export default {
       right: 39,
       down: 40,
       direction: 0,
-      loop: 0
+      loop: 0,
+      apple: []
     }
   },
   methods: {
@@ -35,7 +36,7 @@ export default {
       this.ctx.fillRect(0, 0, 500, 500)
 
       this.ctx.fillStyle = '#cc0000'
-      this.ctx.fillRect(150, 150, 10, 10)
+      this.ctx.fillRect(this.apple[0], this.apple[1], 10, 10)
 
       this.ctx.fillStyle = '#99ffbb'
 
@@ -59,9 +60,23 @@ export default {
       }
 
       this.checkForCollisions(head)
-
-      this.snake.pop()
+      
+      if (head[0] === this.apple[0] && head[1] === this.apple[1]) {
+        this.createApple()
+      } else {
+        this.snake.pop()
+      }
+      
       this.snake.unshift(head)
+    },
+    checkForApple (head) {
+      
+    },
+    createApple () {
+      this.apple = [this.randomInteger() * 10, this.randomInteger() * 10]
+    },
+    randomInteger () {
+      return Math.floor(Math.random() * 50)
     },
     checkForCollisions (head) {
       if (head[0] <= 0 || head[0] >= 500 || head[1] <= 0 || head[1] >= 500) {
@@ -79,6 +94,7 @@ export default {
     this.deltaFrame = 1000 / this.targetFPS
     this.snake = [[40, 10], [30, 10], [20, 10], [10, 10]]
     this.direction = this.right
+    this.createApple()
 
     Vue.nextTick(() => {
       this.canvas = this.$refs.canvas
