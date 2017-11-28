@@ -21,7 +21,8 @@ export default {
       up: 38,
       right: 39,
       down: 40,
-      direction: 0
+      direction: 0,
+      loop: 0
     }
   },
   methods: {
@@ -57,8 +58,15 @@ export default {
         head[1] += 10
       }
 
+      this.checkForCollisions(head)
+
       this.snake.pop()
       this.snake.unshift(head)
+    },
+    checkForCollisions (head) {
+      if (head[0] <= 0 || head[0] >= 500 || head[1] <= 0 || head[1] >= 500) {
+        clearInterval(this.loop)
+      }
     },
     handleKeyDown (event) {
       if (event.keyCode >= 37 && event.keyCode <= 40) {
@@ -75,10 +83,9 @@ export default {
     Vue.nextTick(() => {
       this.canvas = this.$refs.canvas
       this.ctx = this.canvas.getContext('2d')
-      this.draw()
 
       // BUTTON
-      setInterval(this.gameLoop, this.deltaFrame)
+      this.loop = setInterval(this.gameLoop, this.deltaFrame)
     })
   },
   mounted () {
