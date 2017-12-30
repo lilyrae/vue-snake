@@ -13,17 +13,19 @@ export default {
   data () {
     return {
       canvas: {},
-      ctx: {},
+      context: {},
       snake: [],
       deltaFrame: 0,
-      targetFPS: 1,
+      targetFPS: 15,
       left: 37,
       up: 38,
       right: 39,
       down: 40,
       direction: 0,
       loop: 0,
-      apple: []
+      apple: [],
+      boardSize: 500,
+      score: 0
     }
   },
   methods: {
@@ -33,7 +35,7 @@ export default {
     },
     draw () {
       this.ctx.fillStyle = 'white'
-      this.ctx.fillRect(0, 0, 500, 500)
+      this.ctx.fillRect(0, 0, this.boardSize, this.boardSize)
 
       this.ctx.fillStyle = '#cc0000'
       this.ctx.fillRect(this.apple[0], this.apple[1], 10, 10)
@@ -60,13 +62,16 @@ export default {
       }
 
       this.checkForCollisions(head)
-      
+
       if (head[0] === this.apple[0] && head[1] === this.apple[1]) {
         this.createApple()
+        this.score++
+        clearInterval(this.loop)
+        this.loop = setInterval(this.gameLoop, 1000 / (this.targetFPS + this.score))
       } else {
         this.snake.pop()
       }
-      
+
       this.snake.unshift(head)
     },
     checkForApple (head) {
@@ -79,7 +84,7 @@ export default {
       return Math.floor(Math.random() * 50)
     },
     checkForCollisions (head) {
-      if (head[0] <= 0 || head[0] >= 500 || head[1] <= 0 || head[1] >= 500) {
+      if (head[0] < 0 || head[0] >= this.boardSize || head[1] < 0 || head[1] >= this.boardSize) {
         clearInterval(this.loop)
       }
     },
